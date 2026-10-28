@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Pinjaman extends Model
+{
+    protected $table = 'pinjaman';
+
+    protected $fillable = [
+        'anggota_id',
+        'jumlah_pengajuan',
+        'jumlah_disetujui',
+        'bunga_persen',
+        'tenor_bulan',
+        'status',
+        'approved_by',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'jumlah_pengajuan' => 'decimal:2',
+            'jumlah_disetujui' => 'decimal:2',
+            'bunga_persen' => 'decimal:2',
+        ];
+    }
+
+    public function anggota(): BelongsTo
+    {
+        return $this->belongsTo(Anggota::class, 'anggota_id');
+    }
+
+    public function angsuran(): HasMany
+    {
+        return $this->hasMany(Angsuran::class, 'pinjaman_id');
+    }
+}
